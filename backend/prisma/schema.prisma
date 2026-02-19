@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Incident {
+  id          String   @id @default(uuid())
+  title       String
+  service     String
+  severity    Severity
+  status      Status
+  owner       String?
+  summary     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([createdAt(sort: Desc)])
+  @@index([severity])
+  @@index([status])
+  @@index([service])
+}
+
+enum Severity {
+  SEV1
+  SEV2
+  SEV3
+  SEV4
+}
+
+enum Status {
+  OPEN
+  MITIGATED
+  RESOLVED
+}
